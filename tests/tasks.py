@@ -1,4 +1,4 @@
-from django_core_tasks import task
+from django_tasks_db import task
 
 
 @task()
