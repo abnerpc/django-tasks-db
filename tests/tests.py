@@ -175,6 +175,18 @@ class DatabaseBackendTestCase(TestCase):
         ):
             _ = db_task_result.task
 
+    def test_check(self) -> None:
+        errors = default_task_backend.check()
+
+        self.assertEqual(len(errors), 0)
+
+    @override_settings(INSTALLED_APPS=[])
+    def test_database_backend_app_missing(self) -> None:
+        errors = default_task_backend.check()
+
+        self.assertEqual(len(errors), 1)
+        self.assertIn("django_tasks_db", errors[0].hint)
+
 
 @override_settings(
     TASKS={
