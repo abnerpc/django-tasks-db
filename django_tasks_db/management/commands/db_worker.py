@@ -10,6 +10,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from django_tasks_db import DEFAULT_TASK_BACKEND_ALIAS, tasks
+from django_tasks_db.backend import DatabaseBackend
 from django_tasks_db.models import DBTaskResult
 from django_tasks.exceptions import InvalidTaskBackendError
 from django_tasks_db.task import DEFAULT_QUEUE_NAME, ResultStatus
@@ -129,9 +130,11 @@ class Worker:
 
 def valid_backend_name(val: str) -> str:
     try:
-        tasks[val]
+        backend = tasks[val]
     except InvalidTaskBackendError as e:
         raise ArgumentTypeError(e.args[0]) from e
+    if not isinstance(backend, DatabaseBackend):
+        raise ArgumentTypeError(f"Backend '{val}' is not a database backend")
     return val
 
 
