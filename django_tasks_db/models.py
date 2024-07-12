@@ -20,6 +20,8 @@ from django_tasks_db.task import (
 )
 from django_tasks_db.utils import exception_to_dict, retry
 
+from .utils import normalize_uuid
+
 logger = logging.getLogger("django_tasks_db")
 
 T = TypeVar("T")
@@ -62,7 +64,7 @@ class DBTaskResultQuerySet(models.QuerySet):
         """
         Get a job, locking the row and accounting for deadlocks.
         """
-        return self.select_for_update().first()
+        return self.select_for_update(skip_locked=True).first()
 
 
 class DBTaskResult(GenericBase[P, T], models.Model):
@@ -127,7 +129,7 @@ class DBTaskResult(GenericBase[P, T], models.Model):
         result = TaskResult[T](
             db_result=self,
             task=self.task,
-            id=str(self.id),
+            id=normalize_uuid(self.id),
             status=ResultStatus[self.status],
             enqueued_at=self.enqueued_at,
             started_at=self.started_at,
