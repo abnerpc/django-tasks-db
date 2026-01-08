@@ -49,7 +49,7 @@ Source = "https://github.com/RealOrangeOne/django-tasks-db"
 Issues = "https://github.com/RealOrangeOne/django-tasks-db/issues"
 Changelog = "https://github.com/RealOrangeOne/django-tasks-db/releases"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "ruff",
     "coverage",
