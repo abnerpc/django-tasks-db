@@ -64,4 +64,4 @@ class DBTaskResultAdmin(admin.ModelAdmin):
     def display_run_after(self, obj: DBTaskResult) -> datetime | str:
         if obj.run_after == get_date_max():
             return self.get_empty_value_display()
-        return obj.run_after
+        return obj.run_after  # type: ignore[no-any-return]

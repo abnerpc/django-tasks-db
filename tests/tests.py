@@ -1700,13 +1700,13 @@ class CompatTestCase(SimpleTestCase):
 
 
 class AdminTestCase(TestCase):
-    def setUp(self):
-        self.admin = DBTaskResultAdmin(DBTaskResult, admin.AdminSite)
+    def setUp(self) -> None:
+        self.admin = DBTaskResultAdmin(DBTaskResult, admin.AdminSite)  # type:ignore[arg-type]
 
-    def test_display_run_after_returns_empty_for_date_max_or_none(self):
+    def test_display_run_after_returns_empty_for_date_max_or_none(self) -> None:
         for run_after_value in [get_date_max(), None]:
             with self.subTest(run_after_value):
-                db_task_result = DBTaskResult.objects.create(
+                db_task_result = DBTaskResult.objects.create(  # type:ignore
                     args_kwargs={"args": [], "kwargs": {}},
                     run_after=run_after_value,
                 )
@@ -1715,7 +1715,7 @@ class AdminTestCase(TestCase):
 
                 self.assertEqual(result, self.admin.get_empty_value_display())
 
-    def test_display_run_after_returns_db_value(self):
+    def test_display_run_after_returns_db_value(self) -> None:
         expected_run_after = timezone.make_aware(
             datetime(2025, 4, 3),
             timezone.get_current_timezone(),
